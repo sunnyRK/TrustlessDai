@@ -1,0 +1,53 @@
+{
+  "name": "TrustlessDai",
+  "version": "1.0.0",
+  "description": "Trustless Dai — Private DAI transactions on Ethereum using Zk-SNARKs.",
+  "main": "truffle-config.js",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bignumber.js": "^9.0.0",
+    "child-process": "^1.0.2",
+    "childprocess": "^2.0.2",
+    "css-loader": "^3.5.3",
+    "docker-cli-js": "^2.7.1",
+    "eth-sig-util": "^2.5.3",
+    "install": "^0.13.0",
+    "next": "^9.1.5",
+    "next-routes": "^1.4.2",
+    "node-docker-api": "^1.1.22",
+    "node-fetch": "^2.6.0",
+    "node-sass": "^4.14.1",
+    "npm": "^6.14.5",
+    "openzeppelin-solidity": "^2.4.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "3.0.0",
+    "react-toastify": "^5.5.0",
+    "semantic-ui-react": "^0.88.2",
+    "solc": "^0.5.12",
+    "truffle-hdwallet-provider": "0.0.3",
+    "web3": "^1.2.4",
+    "web3-utils": "^1.2.4"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "browser": {
+    "child_process": false
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sunnyRK/TrustlessDai.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sunnyRK/TrustlessDai/issues"
+  },
+  "homepage": "https://github.com/sunnyRK/TrustlessDai#readme"
+}
