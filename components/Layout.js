@@ -4,7 +4,6 @@ import Head from 'next/head';
 import { Container, List, Header, Grid, Segment } from 'semantic-ui-react';
 
 export default props => {
-    
     return(
         <div>
             <Head>
@@ -17,7 +16,7 @@ export default props => {
             {
                 !props.hideFooter &&
                 (
-                    <Segment inverted vertical style={{ padding: '4em 4em', marginTop: "30px" }}>
+                    <Segment inverted vertical style={{ padding: '4em 4em', marginTop: "350px" }}>
                         <Container>
                         <Grid divided inverted stackable>
                             <Grid.Row>

@@ -2,7 +2,7 @@
   "name": "TrustlessDai",
   "version": "1.0.0",
   "description": "Trustless Dai — Private DAI transactions on Ethereum using Zk-SNARKs.",
-  "main": "truffle-config.js",
+  "main": "index.js",
   "dependencies": {
     "axios": "^0.19.2",
     "bignumber.js": "^9.0.0",
