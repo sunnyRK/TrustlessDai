@@ -12,7 +12,7 @@ export default props => {
             </Head>
             { !props.hideHeader && <Headers/> }
             {props.children}
-            {console.log('show sidebar======', props.showSidebar)}
+            {/* {console.log('show sidebar======', props.showSidebar)} */}
             {
                 !props.hideFooter &&
                 (

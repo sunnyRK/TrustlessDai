@@ -9,6 +9,12 @@ import Axios from 'axios';
 
 class Index extends Component {
 
+    state = {
+        recipient:"",
+        amount: "",
+        claimamount: ""
+    }
+
     ontransfer = async () => {
         event.preventDefault();
         try {
@@ -17,7 +23,7 @@ class Index extends Component {
             const daiInstance = await getERCContractInstance(web3);
             const approvehash = await daiInstance.methods.approve(
                 "0xBEe02FD1e5b9e3B34A856Fb1E6493dFC854968dB",
-                "10"
+                this.state.claimamount
             ).send({
                 from: accounts[0]
             });
@@ -25,8 +31,8 @@ class Index extends Component {
 
             const zkInstance = await getZkSnarkInstance(web3);
             const hash = await zkInstance.methods.transferNoteToContract(
-                "10",
-                "0xE33f4C2306eFE9BF66a64A3c42408d2Fe1Cb890f",
+                this.state.claimamount,
+                this.state.recipient,
             ).send({
                 from: accounts[0]
             });
@@ -42,33 +48,53 @@ class Index extends Component {
         try {
             const accounts = await web3.eth.getAccounts();
             const zkInstance = await getZkSnarkInstance(web3);
+            // const witnessparams = getWitness(
+            //     '0xAeF37Da1db647bC187a46AEBEB662CF269636e54', // sender
+            //     '9', 
+            //     '0xE33f4C2306eFE9BF66a64A3c42408d2Fe1Cb890f', // receiver
+            //     '2'
+            // );
+
             const witnessparams = getWitness(
-                '0x48845392F5a7c6b360A733e0ABE2EdcC74f1F4d6', // sender
+                "0xAeF37Da1db647bC187a46AEBEB662CF269636e54", // sender
                 '9', 
-                '0xE33f4C2306eFE9BF66a64A3c42408d2Fe1Cb890f', // receiver
-                '1'
+                accounts[0], // receiver
+                this.state.claimamount
             );
             console.log(witnessparams)
 
-            const url = "http://localhost:3001/createproof";
-            await Axios.get("http://localhost:3001/createproof?witness=168904202930327939080492230969004622904 339630068017193623570711849636010664817 1216631698 326532002671535014699329485375999702230 0 0 80710054703952517336223123171789823554 92441430577956810800440641638774416100 3812576291 9221067889684513358870464131861547279 0 0 168904202930327939080492230969004622904 339630068017193623570711849636010664817 0 0", {
-                // params: {
-                //     witness: witnessparams
-                //   }
-            })
+            // const url = "http://localhost:3001/createproof";
+            // await Axios.get("http://localhost:3001/createproof?witness=168904202930327939080492230969004622904 339630068017193623570711849636010664817 1216631698 326532002671535014699329485375999702230 0 0 80710054703952517336223123171789823554 92441430577956810800440641638774416100 3812576291 9221067889684513358870464131861547279 0 0 168904202930327939080492230969004622904 339630068017193623570711849636010664817 0 0"
+            // await Axios.get("http://localhost:3001/createproof?witness=80710054703952517336223123171789823554 92441430577956810800440641638774416100 3812576291 9221067889684513358870464131861547279 0 0 168904202930327939080492230969004622904 339630068017193623570711849636010664817 1216631698 326532002671535014699329485375999702230 0 0 80710054703952517336223123171789823554 92441430577956810800440641638774416100 0 0",{    
+            let response;    
+            await Axios.get("http://localhost:3001/createproof?witness="+witnessparams, {})
                 .then((res) => {
                     if (res.statusText == 'OK') {
                         console.log("response:", res)
+                        response = res
                     } else {
+                        alert("error")
                         console.log(res);
                     }
                 })
                 .catch((err) => {
-                console.log(err);
-                this.setState({ shouldSwap: false, blocking: false });
+                    alert("err")
+                    console.log(err);
             });
 
-            alert("Done")
+            // console.log(response.data.proof.a)
+            // console.log(response.data.inputs)
+
+
+            const hash = await zkInstance.methods.claimNote(
+                response.data.proof.a,
+                response.data.proof.b,
+                response.data.proof.c,
+                response.data.inputs,
+                this.state.claimamount
+            ).send({
+                from: accounts[0]
+            });
             
             // const hash = await zkInstance.methods.claimNote(
             //     ["0x168bab1bbbc15936beb565b51ce8fea998006a0fa9567417aa6261f46dcd16f9", "0x01e5c794ab8299705c319366d1bb2bee79b96f05fa08c9aa103f8dcb43a8806b"],
@@ -93,13 +119,54 @@ class Index extends Component {
                 <Grid>
                     <Grid.Row>
                         <Form onSubmit={this.ontransfer}>
-                            <Button>transfer</Button>
+                            <Form.Field>
+                                <Input
+                                    type = "input"
+                                    labelPosition="right"
+                                    label="Recipient Address"
+                                    value={this.state.recipient}
+                                    onChange={event => 
+                                        this.setState({
+                                            recipient: event.target.value,
+                                    })}
+                                />
+                            </Form.Field>
+                            <Form.Field>
+                                <Input
+                                    type = "input"
+                                    labelPosition="right"
+                                    label="Amount"
+                                    value={this.state.amount}
+                                    onChange={event => 
+                                        this.setState({
+                                            amount: event.target.value,
+                                    })}
+                                />                              
+                            </Form.Field>
+                            <Form.Field>
+                                <Button>transfer</Button> 
+                            </Form.Field>
                         </Form>
                     </Grid.Row>
                 
                     <Grid.Row>
                         <Form onSubmit={this.onClaim}>
-                            <Button>claim</Button>
+
+                            <Form.Field>
+                                <Input
+                                    type = "input"
+                                    labelPosition="right"
+                                    label="Claim Amount"
+                                    value={this.state.claimamount}
+                                    onChange={event => 
+                                        this.setState({
+                                            claimamount: event.target.value,
+                                    })}
+                                />                              
+                            </Form.Field>
+                            <Form.Field>
+                                <Button>claim amount</Button> 
+                            </Form.Field>                        
                         </Form>
                     </Grid.Row>
                 </Grid>
