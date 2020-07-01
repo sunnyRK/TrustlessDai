@@ -28,8 +28,9 @@ youtube link will be here
 - Use,
     - You can transfer DAI privately to any ethereum address.
     - You can accept DAI which is send by other etherum address privately by claimDAI features.  
+- Used don't need to worry about the verify prrof or compute witness. Platform will handle itself during transaction:)
 
-### How to use?
+### How to use for devs?
 
 - Run Dapp on localhost  
 1). clone repo `https://github.com/sunnyRK/TrustlessDai`  
