@@ -36,11 +36,14 @@ function formatWitness(params) {
 }
 
 export function getWitness(from, fAmount, to, tAmount) {
+    console.log(parseInt(fAmount, 16), parseInt(tAmount, 16))
     from = from.slice(2)
-    fAmount = fAmount.slice(2)
+    // fAmount = fAmount.slice(2)
     to = to.slice(2)
-    tAmount = tAmount.slice(2)
-    var diff = parseInt(fAmount.slice(2), 16) - parseInt(tAmount.slice(2), 16)
+    // tAmount = tAmount.slice(2)
+    console.log(fAmount, tAmount)
+    var diff = parseInt(fAmount, 16) - parseInt(tAmount, 16)
+    // var diff = parseInt(fAmount.slice(2), 16) - parseInt(tAmount.slice(2), 16)
     const params = getParams(from, fAmount).concat(getParams(to, tAmount));
     let leftOverWitness = getParams(from, diff);
     leftOverWitness.splice(2, 2);
@@ -51,9 +54,8 @@ export function getWitness(from, fAmount, to, tAmount) {
 // getWitness(
 //     // "0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c",
 //     '0x48845392F5a7c6b360A733e0ABE2EdcC74f1F4d6', // sender
-//     '9', // value of the secret note
+//     '11111111111111', // value of the secret note
 //     '0xE33f4C2306eFE9BF66a64A3c42408d2Fe1Cb890f', // receiver
-//     // "0x14723A09ACff6D2A60DcdF7aA4AFf308FDDC160C",
 //     '1' // value to be sent
 //   );
 
