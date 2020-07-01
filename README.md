@@ -28,7 +28,7 @@ youtube link will be here
 - Use,
     - You can transfer DAI privately to any ethereum address.
     - You can accept DAI which is send by other etherum address privately by claimDAI features.  
-- Used don't need to worry about the verify prrof or compute witness. Platform will handle itself during transaction:)
+- Used don't need to worry about the verify proof or compute witness. Platform will handle itself during transaction:)
 
 ### How to use for devs?
 
