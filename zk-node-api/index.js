@@ -35,6 +35,7 @@ app.get("/createproof", async (req, res, next) => {
                 fs.readFile('zk-container_proof.json', 'utf8', function (err, data) {
                     if (err) throw err;
                     obj = JSON.parse(data);
+                    console.log(obj);
                     res.send(obj)
                 });
                 if (error !== null) {

@@ -8,44 +8,13 @@ import {
 import GoogleLoader from '../shared/GoogleLoader';
 
 export default ({
-  recipient, handleState, amount, ontransfer, claimamount, checkBalance,
-  daiBalance, claimBalance, metamaskAddress, checkBalanceLoading, transferLoading,
-  metamaskLoading, generatedProofJson, zkWitness, onClearClick,
+  recipient, handleState, amount, ontransfer, onClaim, claimamount, checkBalance,
+  daiBalance, claimBalance, metamaskAddress, checkBalanceLoading, transferLoading, claimLoading,
+  metamaskLoading, generatedProofJson, zkWitness, onClearClick, zkLoading
 }) => (
   <div className="landing">
     <div className="left-section">
-    <BlockUI
-        tag="div"
-        // blocking
-        loader={<GoogleLoader height={50} width={50} />}
-      >
-        <div className="claim card">
-          <h4>Claim</h4>
-          <div className="form-field">
-            <label className="field-label">Claim Amount</label>
-            <Input
-              type="input"
-              fluid
-              className="form-control"
-              value={claimamount}
-              onChange={(event) => {
-                handleState({ claimamount: event.target.value });
-              }}
-            />
-            <label className="total">total will see here</label>
-          </div>
-          <div className="form-field button claim-footer">
-            <Button
-              primary
-              className="claim-button"
-              type="submit"
-              onClick={() => onClaim()}
-            >
-              Claim Amount
-            </Button>
-          </div>
-        </div>
-      </BlockUI>
+    
 
       <BlockUI
         tag="div"
@@ -77,7 +46,7 @@ export default ({
                 handleState({ amount: event.target.value });
               }}
             />
-            <label className="total">total will see here</label>
+            <label className="total">Total balance:  {daiBalance/1e18 || '0'} DAI</label>
           </div>
           <div className="form-field button transfer-footer">
             <Button
@@ -90,6 +59,44 @@ export default ({
             </Button>
           </div>
         </div>
+        </BlockUI>
+        <BlockUI
+        tag="div"
+        blocking={claimLoading}
+        loader={<GoogleLoader height={50} width={50} />}
+      >
+        <div className="claim card">
+          <h4>Claim</h4>
+          <div className="form-field">
+            <label className="field-label">Claim Amount</label>
+            <Input
+              type="input"
+              fluid
+              className="form-control"
+              value={claimamount}
+              onChange={(event) => {
+                handleState({ claimamount: event.target.value });
+              }}
+            />
+            <label className="total">Total claim balance you have:  {claimBalance/1e18 || '0'} DAI</label>
+          </div>
+          <div className="form-field button claim-footer">
+            <Button
+              primary
+              className="claim-button"
+              type="submit"
+              onClick={() => onClaim()}
+            >
+              Claim Amount
+            </Button>
+          </div>
+        </div>
+        </BlockUI>
+        <BlockUI
+        tag="div"
+        blocking={zkLoading}
+        loader={<GoogleLoader height={50} width={50} />}
+      >
         {
           zkWitness && (
             <div className="zk-witness witness-proof-wrapper">
@@ -147,11 +154,11 @@ export default ({
         <h4>Balance</h4>
           <div className="current-balance">
             <h3>Current Balance</h3>
-            <div className="token-balance">{daiBalance || '-'}</div>
+            <div className="token-balance">{daiBalance/1e18 || '0'} DAI</div>
           </div>
           <div className="current-balance">
             <h3>Claim Balance</h3>
-            <div className="token-balance">{claimBalance || '-'}</div>
+            <div className="token-balance">{claimBalance/1e18 || '0'} DAI</div>
           </div>
           <div className="check-balance-footer button">
             <Button
