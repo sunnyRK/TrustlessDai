@@ -10,18 +10,7 @@ import Landing from '../src/components/Landing';
 import MainTemplate from '../src/shared/MainTemplate';
 import NetworkTypeDialogContainer from '../src/shared/NetworkTypeDialog/NetworkTypeDialogContainer';
 
-const witnessJson = {
-    "proof": {
-    "a": ["0x168bab1bbbc15936beb565b51ce8fea998006a0fa9567417aa6261f46dcd16f9", "0x01e5c794ab8299705c319366d1bb2bee79b96f05fa08c9aa103f8dcb43a8806b"],
-    "b": [["0x1167f9740114fe14ddb0545c4118362589fd7e7ef0bcada02c0212b153755d51", "0x1b92451f7a2f8ce896171a8d5842f3455446f2b35e1fb81a1f5040cbcace54ed"], ["0x30583965a284f87f733cf0c57016d98446500f31559f810bc6aa6d0c44f2bdd5", "0x066b64dde5525d349011707b6f664cc1c1c4b58c3b822016381796675565fdf4"]],
-    "c": ["0x12d79f5ac4c6cac84c97a113bfa9d2a0c27bbe818e4ca0aad4e9e7015f2ec24a", "0x17093bbb859ab53232b408b012e761b1dc87c0cc9d12d09e8d2c99243d1f17c7"]
-    },
-    "inputs": ["0x000000000000000000000000000000007f11c426b5418e7f6d1577d332178438", "0x00000000000000000000000000000000ff825f2e5750acc639cf923b34f02371", "0x000000000000000000000000000000003cb830ed06f3d0e56d7d0ad35010de42", "0x00000000000000000000000000000000458b9269b0c07f752e592cd7832522e4", "0x000000000000000000000000000000007f11c426b5418e7f6d1577d332178438", "0x00000000000000000000000000000000ff825f2e5750acc639cf923b34f02371", "0x0000000000000000000000000000000000000000000000000000000000000001"]
-    }
-    
-
 class Index extends Component {
-
     state = {
         recipient:"",
         amount: "",
@@ -35,6 +24,8 @@ class Index extends Component {
         displayMessage: '',
         metamaskAddress: '',
         metamaskLoginMessage: '',
+        zkWitness: '',
+        generatedProofJson: '',
     }
 
     async componentDidMount() {
@@ -62,16 +53,6 @@ class Index extends Component {
         } else {
             this.setState({ displayMessage: '' });
         }
-
-        // toast.success((
-        //     <div>
-        //         <h3>Heading</h3>
-        //         <span>{JSON.stringify(witnessJson)}</span>
-        //     </div>
-        // ), {
-        //     position: toast.POSITION.TOP_RIGHT,
-        //     autoClose: 100000000
-        // });
         this.checkBalance();
     }
 
@@ -178,9 +159,7 @@ class Index extends Component {
                         accounts[0], // receiver
                         this.state.claimamount
                     );
-                    toast.success("Witness params to generate proof: " + witnessparams, {
-                        position: toast.POSITION.TOP_RIGHT
-                    });
+                    this.setState({ zkWitness: witnessparams });
                     // // Generate Proof using witness params through zokrates library
                     // // No need to generate proof using command line terminal 
                     // // We have host the zokrates image in docker and automatically calculated when transaction happen 
@@ -189,9 +168,7 @@ class Index extends Component {
                     await Axios.get("http://localhost:3001/createproof?witness="+witnessparams, {})
                         .then((proof) => {
                             if (proof.statusText == 'OK') {
-                                toast.success("Generate Proof Response from witness:", proof, {
-                                    position: toast.POSITION.TOP_RIGHT
-                                });
+                            this.setState({ generatedProofJson: proof });
                                 generateProof = proof;
                             } else {
                                 console.log(proof);
@@ -235,6 +212,10 @@ class Index extends Component {
         });
     }
 
+    onClearClick = (key) => {
+        this.setState({ [key]: '' });
+    }
+
     render() {
         return (
             <MainTemplate>
@@ -251,6 +232,9 @@ class Index extends Component {
                     transferLoading={this.state.transferLoading}
                     metamaskLoading={this.state.metamaskLoading}
                     metamaskAddress={this.state.metamaskAddress}
+                    zkWitness={this.state.zkWitness}
+                    generatedProofJson={this.state.generatedProofJson}
+                    onClearClick={this.onClearClick}
                 />
                 <NetworkTypeDialogContainer
                     displayMessage={this.state.metamaskLoginMessage || this.state.displayMessage}

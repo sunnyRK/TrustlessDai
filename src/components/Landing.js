@@ -10,10 +10,43 @@ import GoogleLoader from '../shared/GoogleLoader';
 export default ({
   recipient, handleState, amount, ontransfer, claimamount, checkBalance,
   daiBalance, claimBalance, metamaskAddress, checkBalanceLoading, transferLoading,
-  metamaskLoading,
+  metamaskLoading, generatedProofJson, zkWitness, onClearClick,
 }) => (
   <div className="landing">
     <div className="left-section">
+    <BlockUI
+        tag="div"
+        // blocking
+        loader={<GoogleLoader height={50} width={50} />}
+      >
+        <div className="claim card">
+          <h4>Claim</h4>
+          <div className="form-field">
+            <label className="field-label">Claim Amount</label>
+            <Input
+              type="input"
+              fluid
+              className="form-control"
+              value={claimamount}
+              onChange={(event) => {
+                handleState({ claimamount: event.target.value });
+              }}
+            />
+            <label className="total">total will see here</label>
+          </div>
+          <div className="form-field button claim-footer">
+            <Button
+              primary
+              className="claim-button"
+              type="submit"
+              onClick={() => onClaim()}
+            >
+              Claim Amount
+            </Button>
+          </div>
+        </div>
+      </BlockUI>
+
       <BlockUI
         tag="div"
         blocking={transferLoading}
@@ -57,39 +90,40 @@ export default ({
             </Button>
           </div>
         </div>
-      </BlockUI>
-
-      <BlockUI
-        tag="div"
-        // blocking
-        loader={<GoogleLoader height={50} width={50} />}
-      >
-        <div className="claim card">
-          <h4>Claim</h4>
-          <div className="form-field">
-            <label className="field-label">Claim Amount</label>
-            <Input
-              type="input"
-              fluid
-              className="form-control"
-              value={claimamount}
-              onChange={(event) => {
-                handleState({ claimamount: event.target.value });
-              }}
-            />
-            <label className="total">total will see here</label>
-          </div>
-          <div className="form-field button claim-footer">
-            <Button
-              primary
-              className="claim-button"
-              type="submit"
-              onClick={() => onClaim()}
-            >
-              Claim Amount
-            </Button>
-          </div>
-        </div>
+        {
+          zkWitness && (
+            <div className="zk-witness witness-proof-wrapper">
+              <div className="zk-witness-header header">
+                <h4>zk-witness</h4>
+                <div
+                  className="clear-button"
+                  onClick={() => onClearClick('zkWitness')}
+                >
+                  clear
+                </div>
+              </div>
+              <div style={{ wordBreak: 'break-word', paddingBottom: '10px' }}>{zkWitness}</div>
+            </div>
+          )
+        }
+        {
+          generatedProofJson && (
+            <div className="generated-proof witness-proof-wrapper">
+              <div className="generated-proof-header header">
+                <h4>generated-proof</h4>
+                <div
+                  className="clear-button"
+                  onClick={() => onClearClick('generatedProofJson')}
+                >
+                  clear
+                </div>
+              </div>
+              <pre>
+                {JSON.stringify(generatedProofJson, null, 2)}
+              </pre>
+            </div>
+          )
+        }
       </BlockUI>
     </div>
     <div className="right-section">

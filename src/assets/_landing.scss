@@ -16,9 +16,27 @@
     padding-right: 20px;
     .transfer, .claim {
       padding: 30px 60px;
+      @media screen and (max-width: 650px) {
+        padding: 20px 20px;
+      }
       .transfer-footer, .claim-footer {
         display: flex;
         justify-content: flex-end;
+      }
+    }
+    .witness-proof-wrapper {
+      padding: 30px 60px;
+      @media screen and (max-width: 650px) {
+        padding: 20px 20px;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        .clear-button {
+          font-weight: bold;
+          cursor: pointer;
+          text-decoration: underline;
+        }
       }
     }
   }
