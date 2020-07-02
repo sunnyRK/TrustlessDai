@@ -1,0 +1,56 @@
+.landing {
+  display: flex;
+  height: 100%;
+  padding: 20px;
+  @media screen and (max-width: 800px) {
+    flex-direction: column-reverse;
+    .left-section, .right-section {
+      width: 100% !important;
+    }
+    .right-section {
+      padding-right: 20px;
+    }
+  }
+  .left-section {
+    width: 70%;
+    padding-right: 20px;
+    .transfer, .claim {
+      padding: 30px 60px;
+      .transfer-footer, .claim-footer {
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+  }
+  .right-section {
+    width: 30%;
+    .metamask-info {
+      .address {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 600;
+      }
+    }
+    .balance {
+      .current-balance {
+        .token-balance {
+          margin: 0 0 15px;
+          font-size: 1.6rem;
+          font-weight: 600;
+          line-height: 1.6rem;
+          color: dodgerblue;
+          word-break: break-all;
+        }
+      }
+      .check-balance-button {
+        margin: 10px 0 0;
+        height: 40px;
+      }
+    }
+  }
+  .total {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

@@ -1,24 +1,12 @@
 import React, { Component } from 'react';
-import Axios from 'axios';
-import { toast } from 'react-toastify';
-
+import { Container, Form, Button, Grid, Input } from 'semantic-ui-react';
+import { ToastContainer } from 'react-toastify';
 import {getZkSnarkInstance, getERCContractInstance} from '../config/instances/contractInstances';
 import web3 from '../config/web3/web3';
 import Layout from '../components/Layout';
 import {getWitness} from "../functions/getWitness";
-import Landing from '../src/components/Landing';
-import MainTemplate from '../src/shared/MainTemplate';
-import NetworkTypeDialogContainer from '../src/shared/NetworkTypeDialog/NetworkTypeDialogContainer';
-
-const witnessJson = {
-    "proof": {
-    "a": ["0x168bab1bbbc15936beb565b51ce8fea998006a0fa9567417aa6261f46dcd16f9", "0x01e5c794ab8299705c319366d1bb2bee79b96f05fa08c9aa103f8dcb43a8806b"],
-    "b": [["0x1167f9740114fe14ddb0545c4118362589fd7e7ef0bcada02c0212b153755d51", "0x1b92451f7a2f8ce896171a8d5842f3455446f2b35e1fb81a1f5040cbcace54ed"], ["0x30583965a284f87f733cf0c57016d98446500f31559f810bc6aa6d0c44f2bdd5", "0x066b64dde5525d349011707b6f664cc1c1c4b58c3b822016381796675565fdf4"]],
-    "c": ["0x12d79f5ac4c6cac84c97a113bfa9d2a0c27bbe818e4ca0aad4e9e7015f2ec24a", "0x17093bbb859ab53232b408b012e761b1dc87c0cc9d12d09e8d2c99243d1f17c7"]
-    },
-    "inputs": ["0x000000000000000000000000000000007f11c426b5418e7f6d1577d332178438", "0x00000000000000000000000000000000ff825f2e5750acc639cf923b34f02371", "0x000000000000000000000000000000003cb830ed06f3d0e56d7d0ad35010de42", "0x00000000000000000000000000000000458b9269b0c07f752e592cd7832522e4", "0x000000000000000000000000000000007f11c426b5418e7f6d1577d332178438", "0x00000000000000000000000000000000ff825f2e5750acc639cf923b34f02371", "0x0000000000000000000000000000000000000000000000000000000000000001"]
-    }
-    
+import Axios from 'axios';
+const BN = require('bignumber.js');
 
 class Index extends Component {
 
@@ -27,57 +15,13 @@ class Index extends Component {
         amount: "",
         claimamount: "",
         zkContractAddress: "0x0B6B70493d7cEf43A4E8eC84E62B9C6767b6bda0",
-        daiBalance: '',
-        claimBalance: '',
-        checkBalanceLoading: false,
-        transferLoading: false,
-        metamaskLoading: false,
-        displayMessage: '',
-        metamaskAddress: '',
-        metamaskLoginMessage: '',
+        daiBalance: 0,
+        claimBalance: 0
     }
 
-    async componentDidMount() {
-        let networkType;
-        this.setState({ metamaskLoading: true });
-        const accounts = await web3.eth.getAccounts();
-        if (accounts.length === 0) {
-            this.setState({ metamaskLoginMessage: 'Connect your metamask account (& reload)', metamaskLoading: false });
-            await window.ethereum.enable();
-            const accounts = await web3.eth.getAccounts();
-            this.setState({ metamaskLoginMessage: '', metamaskAddress: accounts[0] });
-        } else {
-            this.setState({ metamaskAddress: accounts[0], metamaskLoading: false });
-        }
-
-        await web3.eth.net.getNetworkType()
-            .then(function(type) {
-                networkType = type
-            });
-
-        if(networkType != "kovan") {
-            this.setState({
-                displayMessage: "Network Error: Change network " + networkType + " to kovan",
-            });
-        } else {
-            this.setState({ displayMessage: '' });
-        }
-
-        // toast.success((
-        //     <div>
-        //         <h3>Heading</h3>
-        //         <span>{JSON.stringify(witnessJson)}</span>
-        //     </div>
-        // ), {
-        //     position: toast.POSITION.TOP_RIGHT,
-        //     autoClose: 100000000
-        // });
-        this.checkBalance();
-    }
-
-    checkBalance = async () => {
+    checkBalalnce = async () => {
+        event.preventDefault();
         try {
-            this.setState({ checkBalanceLoading: true });
             const accounts = await web3.eth.getAccounts();
 
             const daiInstance = await getERCContractInstance(web3);
@@ -93,20 +37,17 @@ class Index extends Component {
 
             this.setState({
                 daiBalance: balalnceOfDai,
-                claimBalance: claimReserve[2],
-                checkBalanceLoading: false,
+                claimBalance: claimReserve[2]
             });
 
         } catch (error) {
             console.log(error);
-            this.setState({ checkBalanceLoading: false });
         }
     };
 
     ontransfer = async () => {
         event.preventDefault();
         try {
-            this.setState({ transferLoading: true });
             const accounts = await web3.eth.getAccounts();
             
             const daiInstance = await getERCContractInstance(web3);
@@ -146,15 +87,10 @@ class Index extends Component {
                 });
                 console.log("Transaction hash: ", hash);
             } else {
-                this.setState({ transferLoading: false });
-                toast.error("Insufficient Dai Balance!", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
+                alert("Insufficient Dai Balance!");
             }
-            this.setState({ transferLoading: false });
         } catch (error) {
             console.log(error);
-            this.setState({ transferLoading: false });
         }
     };
 
@@ -178,9 +114,8 @@ class Index extends Component {
                         accounts[0], // receiver
                         this.state.claimamount
                     );
-                    toast.success("Witness params to generate proof: " + witnessparams, {
-                        position: toast.POSITION.TOP_RIGHT
-                    });
+                    console.log("Witness params to generate proof: ", witnessparams)
+
                     // // Generate Proof using witness params through zokrates library
                     // // No need to generate proof using command line terminal 
                     // // We have host the zokrates image in docker and automatically calculated when transaction happen 
@@ -189,9 +124,7 @@ class Index extends Component {
                     await Axios.get("http://localhost:3001/createproof?witness="+witnessparams, {})
                         .then((proof) => {
                             if (proof.statusText == 'OK') {
-                                toast.success("Generate Proof Response from witness:", proof, {
-                                    position: toast.POSITION.TOP_RIGHT
-                                });
+                                console.log("Generate Proof Response from witness:", proof);
                                 generateProof = proof;
                             } else {
                                 console.log(proof);
@@ -212,51 +145,89 @@ class Index extends Component {
                     ).send({
                         from: accounts[0]
                     });
-                    this.checkBalance();
+                    this.checkBalalnce();
                     console.log("ClaimeNote Hash: ", hash);
                 } else {
-                    toast.error("Claim amount is not valid!", {
-                        position: toast.POSITION.TOP_RIGHT
-                    });
+                    alert("Claim amount is not valid!")
                 }
             } else {
-                toast.error("Note is used!", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
+                alert("Note is used!");
             }
+            
         } catch (error) {
             console.log(error);
         }
     };
 
-    handleState = (value, callback) => {
-        this.setState(value, () => {
-          if (callback) callback();
-        });
-    }
-
     render() {
         return (
-            <MainTemplate>
-                <Landing
-                    recipient={this.state.recipient}
-                    amount={this.state.amount}
-                    claimamount={this.state.claimamount}
-                    daiBalance={this.state.daiBalance}
-                    claimBalance={this.state.claimBalance}
-                    handleState={this.handleState}
-                    ontransfer={this.ontransfer}
-                    checkBalance={this.checkBalance}
-                    checkBalanceLoading={this.state.checkBalanceLoading}
-                    transferLoading={this.state.transferLoading}
-                    metamaskLoading={this.state.metamaskLoading}
-                    metamaskAddress={this.state.metamaskAddress}
-                />
-                <NetworkTypeDialogContainer
-                    displayMessage={this.state.metamaskLoginMessage || this.state.displayMessage}
-                    openDialog={this.state.metamaskLoginMessage || this.state.displayMessage}
-                />
-            </MainTemplate>
+          <Layout>
+            <ToastContainer/>
+            <Container>
+                <Grid>
+                    <Grid.Row>
+                        <Form onSubmit={this.ontransfer}>
+                            <Form.Field>
+                                <Input
+                                    type = "input"
+                                    labelPosition="right"
+                                    label="Recipient Address"
+                                    value={this.state.recipient}
+                                    onChange={event => 
+                                        this.setState({
+                                            recipient: event.target.value,
+                                    })}
+                                />
+                            </Form.Field>
+                            <Form.Field>
+                                <Input
+                                    type = "input"
+                                    labelPosition="right"
+                                    label="Amount"
+                                    value={this.state.amount}
+                                    onChange={event => 
+                                        this.setState({
+                                            amount: event.target.value,
+                                    })}
+                                />                              
+                            </Form.Field>
+                            <Form.Field>
+                                <Button>transfer</Button> 
+                            </Form.Field>
+                        </Form>
+                    </Grid.Row>
+                
+                    <Grid.Row>
+                        <Form onSubmit={this.onClaim}>
+
+                            <Form.Field>
+                                <Input
+                                    type = "input"
+                                    labelPosition="right"
+                                    label="Claim Amount"
+                                    value={this.state.claimamount}
+                                    onChange={event => 
+                                        this.setState({
+                                            claimamount: event.target.value,
+                                    })}
+                                />                              
+                            </Form.Field>
+                            <Form.Field>
+                                <Button>claim amount</Button> 
+                            </Form.Field>                        
+                        </Form>
+                    </Grid.Row>
+
+                    <Grid.Row>
+                        <Form onSubmit={this.checkBalalnce}>
+                            <Form.Field>
+                                <Button>check balance</Button> 
+                            </Form.Field>                        
+                        </Form>
+                    </Grid.Row>
+                </Grid>
+            </Container>
+          </Layout>
         );
     }
 }
