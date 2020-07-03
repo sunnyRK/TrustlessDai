@@ -7,7 +7,7 @@ import {
 const MainTemplate = ({ children }) => (
   <div className="main-template">
     <div className="main-header">
-      <div className="app-name">Instcrypt</div>
+      <div className="app-name">TrustlessDAI</div>
     </div>
     <div className="main-content">
       {children}

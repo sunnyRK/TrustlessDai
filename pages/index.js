@@ -79,6 +79,7 @@ class Index extends Component {
                 daiBalance: balalnceOfDai,
                 claimBalance: claimReserve[2],
                 checkBalanceLoading: false,
+                metamaskAddress: accounts[0]
             });
 
         } catch (error) {
@@ -145,7 +146,7 @@ class Index extends Component {
                     position: toast.POSITION.TOP_RIGHT
                 });
             }
-            this.setState({ transferLoading: false });
+            this.setState({ transferLoading: false, recipient: "", amount: "" });
         } catch (error) {
             console.log(error);
             this.setState({ transferLoading: false });
@@ -186,6 +187,7 @@ class Index extends Component {
                     console.log("Proof is generating...");
                     this.setState({ generatedProofJson: "Please Wait. Proof is generating..." });
                     let generateProof;    
+                    
                     await Axios.get("http://localhost:3001/createproof?witness="+witnessparams, {})
                         .then((proof) => {
                             if (proof.statusText == 'OK') {
@@ -242,7 +244,7 @@ class Index extends Component {
                     position: toast.POSITION.TOP_RIGHT
                 });
             }
-            this.setState({ claimLoading: false, zkLoading: false });
+            this.setState({ claimLoading: false, zkLoading: false, claimamount: "" });
         } catch (error) {
             this.setState({ claimLoading: false, zkLoading: false });
             toast.error("Claim Failed!!", {

@@ -8,9 +8,9 @@ Platform try to covers the mainly two points for using private dai transaction,
 
 We have created a wallet-dapp which will be used as a crypto wallet and even platform abstract the zero-knowledge concept so unfamiliar crypto people can easily interact with tokens and can make private transaction.
 
-### Demo
+### Video Demo
 
-youtube link will be here
+https://youtu.be/4xTH2C87XVM
 
 ### Modules
 
