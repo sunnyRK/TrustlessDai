@@ -2,8 +2,8 @@
 
 TrustlessDai is a private DAI transactions on Ethereum using Zk-SNARKs.
 
-Platform try to covers the mainly two points for using private dai transaction,
-1). Make wallet agnostic solutions.
+Platform try to covers the mainly two points for using private dai transaction,  
+1). Make wallet agnostic solutions.  
 2). We prioritize submissions that reduce onboarding friction and are usable to people unfamiliar with crypto.
 
 We have created a wallet-dapp which will be used as a crypto wallet and even platform abstract the zero-knowledge concept so unfamiliar crypto people can easily interact with tokens and can make private transaction.
