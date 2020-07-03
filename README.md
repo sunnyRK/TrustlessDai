@@ -1,4 +1,4 @@
-# Trustless DAI
+# TrustlessDAI
 
 TrustlessDai is a private DAI transactions on Ethereum using Zk-SNARKs.
 
@@ -11,6 +11,7 @@ We have created a wallet-dapp which will be used as a crypto wallet and even pla
 ### Video Demo
 
 https://youtu.be/4xTH2C87XVM
+[![Dai+ZkSnarks](daiZkSnarks.png)](https://youtu.be/4xTH2C87XVM "Privacy In Payments")
 
 ### Modules
 
@@ -18,6 +19,7 @@ https://youtu.be/4xTH2C87XVM
 - Platform used zokrates library using inside docker container. We have written all zokrates commnd inside the `Dockerfile`.  
 - We have written deploy shell script file to run docker for compute witness and generate proof for witness.  
 - To automate this all process we wrap up it with nodeJs api. And before each claimDai transaction, platform will call this api to generate the proof and `proof will pass to the smart contract it will verify on-chain.`
+
 
 2).Smart contract
 - Smart contract level when sender transfer DAI. smart contract will create `note` for that transaction of recipient and note will save on-chain.
@@ -30,8 +32,17 @@ https://youtu.be/4xTH2C87XVM
     - You can accept DAI which is send by other etherum address privately by claimDAI features.  
 - Used don't need to worry about the verify proof or compute witness. Platform will handle itself during transaction:)
 
+### Code-structure
+
+[Smart contract](https://github.com/sunnyRK/TrustlessDai/tree/master/contracts)  
+[Landing page-Wallet](https://github.com/sunnyRK/TrustlessDai/tree/master/src/components)  
+[Generate proof or Automated zero knowledge proof verifier engine](https://github.com/sunnyRK/TrustlessDai/tree/master/zk-node-api)  
+[GetWitness Code](https://github.com/sunnyRK/TrustlessDai/tree/master/functions)  
+[ContractInstances and Project config](https://github.com/sunnyRK/TrustlessDai/tree/master/config)  
+
 ### How to use for devs?
 
+```note:  You must have Linux system to setup```
 - Run Dapp on localhost  
 1). clone repo `https://github.com/sunnyRK/TrustlessDai`  
 2). `cd TrustlessDai`  
@@ -43,7 +54,12 @@ https://youtu.be/4xTH2C87XVM
 1). `Same repo`  
 2). `cd TrustlessDai/zk-node-api`  
 3). `node index.js`   
+    - It will run on `3001 PORT`.
 
+### Contacts
+
+`radadiyasunny970@gmail.com`  
+[Twitter](https://twitter.com//RadadiyaSunny)
 
 
 
