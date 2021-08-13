@@ -13,7 +13,7 @@
     "docker-cli-js": "^2.7.1",
     "eth-sig-util": "^2.5.3",
     "install": "^0.13.0",
-    "next": "^9.1.5",
+    "next": "^11.1.0",
     "next-routes": "^1.4.2",
     "node-docker-api": "^1.1.22",
     "node-fetch": "^2.6.0",
